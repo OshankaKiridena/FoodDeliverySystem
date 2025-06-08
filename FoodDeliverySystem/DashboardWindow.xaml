@@ -1,0 +1,24 @@
+﻿<Window x:Class="FoodDeliverySystem.DashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dashboard - Food Delivery System" Height="400" Width="600"
+        WindowStartupLocation="CenterScreen" Background="#FFFAFAFA">
+
+    <Grid>
+        <!-- Top Header -->
+        <DockPanel Background="#FF2D8CFF" Height="60" Margin="0,15,0,309">
+            <TextBlock Text="Food Delivery Dashboard" Foreground="White" FontSize="22"
+                       FontWeight="Bold" Margin="10" VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+        </DockPanel>
+
+        <!-- Center Buttons -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="0.486,0.517" Height="203">
+            <Button Content="Restaurants" Width="196" Height="43" Margin="0 5"
+                    Click="Restaurants_Click" Background="#FF3FA9F5" Foreground="White" FontWeight="Bold"/>
+            <Button Content="Menu Items" Width="200" Height="40" Margin="0 5" IsEnabled="False"/>
+            <Button Content="Orders" Width="200" Height="40" Margin="0 5" IsEnabled="False"/>
+            <Button Content="Deliveries" Width="200" Height="46" Margin="0 5" IsEnabled="False"/>
+        </StackPanel>
+    </Grid>
+</Window>

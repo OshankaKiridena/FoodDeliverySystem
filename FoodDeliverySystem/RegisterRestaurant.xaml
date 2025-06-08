@@ -1,0 +1,36 @@
+﻿<Window x:Class="FoodDeliveryApp.RegisterRestaurant"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Register Restaurant" Height="600" Width="500"
+        WindowStartupLocation="CenterScreen" Background="#FFF5F5F5">
+
+    <Grid Margin="20">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="Register Restaurant Profile" FontSize="22" FontWeight="Bold"
+                           Foreground="#2D8CFF" TextAlignment="Center" Margin="0 0 0 20"/>
+
+                <TextBlock Text="Restaurant Name:"/>
+                <TextBox x:Name="txtRestaurantName" Height="30" Margin="0 0 0 10"/>
+
+                <TextBlock Text="Description:"/>
+                <TextBox x:Name="txtDescription" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0 0 0 10"/>
+
+                
+
+                <TextBlock Text="Set Username:"/>
+                <TextBox x:Name="txtUsername" Height="30" Margin="0 0 0 10"/>
+
+                <TextBlock Text="Set Password:"/>
+                <PasswordBox x:Name="txtPassword" Height="30" Margin="0 0 0 20"/>
+
+                <Button Content="Register Restaurant" Height="40" Background="#2D8CFF" Foreground="White"
+                        Click="Register_Click"/>
+
+                <TextBlock x:Name="lblStatus" Foreground="Green" Margin="0 15 0 0" TextAlignment="Center"/>
+                <TextBlock x:Name="lblMessage" Foreground="Red" Margin="0 10 0 0" TextAlignment="Center"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
