@@ -5,7 +5,7 @@
         WindowStartupLocation="CenterScreen" Background="#FFF5F5F5">
 
     <Grid Margin="20">
-        <Border Background="White" CornerRadius="10" Padding="20" BorderBrush="Gray" BorderThickness="1">
+        <Border Background="White" CornerRadius="10" Padding="20" BorderBrush="Gray" BorderThickness="1" Margin="0,0,-16,-20">
             <StackPanel>
                 <TextBlock x:Name="lblRestaurant" FontSize="22" FontWeight="Bold" Foreground="#2D8CFF" Margin="0 0 0 20"/>
 
