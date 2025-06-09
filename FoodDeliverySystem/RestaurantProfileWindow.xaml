@@ -5,7 +5,7 @@
         WindowStartupLocation="CenterScreen" Background="#FFF5F5F5">
 
     <Grid Margin="20">
-        <Border Background="White" CornerRadius="10" Padding="20" BorderBrush="Gray" BorderThickness="1" Margin="-19,0,-29,-25">
+        <Border Background="White" CornerRadius="10" Padding="20" BorderBrush="Gray" BorderThickness="1" Margin="-19,0,-49,-224">
             <StackPanel>
                 <TextBlock x:Name="lblRestaurant" FontSize="22" FontWeight="Bold" Foreground="#2D8CFF" Margin="0 0 0 20"/>
 
@@ -13,6 +13,8 @@
                     <StackPanel Width="250">
                         <TextBlock Text=" Restaurant Name:"/>
                         <TextBox x:Name="txtRestaurantName" Margin="0 0 0 5"/>
+                        <TextBlock Text="Restaurant Details:"/>
+                        <TextBox x:Name="txtRestaurantDetails" Height="60" AcceptsReturn="True" Margin="0 0 0 5"/>
                         <TextBlock Text="Item Name:"/>
                         <TextBox x:Name="txtItemName" Margin="0 0 0 5"/>
 
