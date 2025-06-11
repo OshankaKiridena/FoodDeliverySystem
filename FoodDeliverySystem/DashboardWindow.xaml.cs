@@ -11,16 +11,15 @@ namespace FoodDeliverySystem
             InitializeComponent();
         }
 
+        
+
         private void Restaurants_Click(object sender, RoutedEventArgs e)
         {
-
+            RestaurantWindow window = new RestaurantWindow();
+            window.Show();
+            this.Close();
         }
 
-        //private void Restaurants_Click(object sender, RoutedEventArgs e)
-        //{
-        // RestaurantWindow restaurantWindow = new RestaurantWindow();
-        // restaurantWindow.Show();  
-        // }
 
     }
 }

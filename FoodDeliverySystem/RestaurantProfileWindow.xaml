@@ -5,7 +5,15 @@
         WindowStartupLocation="CenterScreen" Background="#FFF5F5F5">
 
     <Grid Margin="20">
-        <Border Background="White" CornerRadius="10" Padding="20" BorderBrush="Gray" BorderThickness="1" Margin="-19,0,-49,-224">
+        <Border Background="White" CornerRadius="10" Padding="20" BorderBrush="Gray" BorderThickness="1" Margin="-19,10,-22,-224" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.463"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
             <StackPanel>
                 <TextBlock x:Name="lblRestaurant" FontSize="22" FontWeight="Bold" Foreground="#2D8CFF" Margin="0 0 0 20"/>
 
@@ -34,11 +42,10 @@
                     <Button Content="Add Menu Item" Width="130" Background="Green" Foreground="White" Click="AddMenuItem_Click" Margin="0 0 10 0"/>
                     <Button Content="Update Selected" Width="130" Background="#FFA500" Foreground="White" Click="UpdateMenuItem_Click"/>
                 </StackPanel>
-
-                <TextBlock Text="Current Menu:" FontWeight="Bold" Margin="0 10 0 5"/>
-                <DataGrid x:Name="dataGridMenu" Height="200" AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dataGridMenu_SelectionChanged">
+                <TextBlock Text="Current Menu:" FontWeight="Bold"/>
+                <DataGrid x:Name="dataGridMenu" Height="233" AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dataGridMenu_SelectionChanged" Width="614">
                     <DataGrid.Columns>
-                       
+
                         <DataGridTextColumn Header="Item" Binding="{Binding ItemName}" Width="*"/>
                         <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="100"/>
                         <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="200"/>

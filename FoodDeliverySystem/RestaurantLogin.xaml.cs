@@ -32,21 +32,23 @@ namespace FoodDeliveryApp;
         {
             conn.Open();
 
-            string query = "SELECT COUNT(*) FROM Restaurant WHERE Username = @username AND Password = @password";
-            //string query = "SELECT id, isstaff FROM Users WHERE Username = @username AND Password = @password";
+           // string query = "SELECT COUNT(*) FROM Restaurant WHERE Username = @username AND Password = @password";
+            string query = "SELECT id  FROM restaurant WHERE Username = @username AND Password = @password";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@username", username);
             cmd.Parameters.AddWithValue("@password", password);
 
 
-            int count = (int)cmd.ExecuteScalar();
+            SqlDataReader reader = cmd.ExecuteReader();
 
-            if (count == 1)
+            if (reader.Read())
             {
+                int restaurantId = reader.GetInt32(0);
+                // After successful login
+                Application.Current.Properties["RestaurantId"] = restaurantId;
 
-
-
-                RestaurantProfileWindow dashboard = new RestaurantProfileWindow();
+                RestaurantProfileWindow dashboard = new RestaurantProfileWindow( );
+               
                 dashboard.Show();
                 this.Close();
             }

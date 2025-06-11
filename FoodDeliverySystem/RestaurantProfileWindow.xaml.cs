@@ -3,20 +3,37 @@ using FoodDeliverySystem;
 using Microsoft.Data.SqlClient;
 using Microsoft.Win32;
 using System;
+
 using System.Collections.Generic;
 using System.Data.SqlClient;
+
 using System.Windows;
+using System.Configuration;
 using System.Windows.Media.Imaging;
+
 namespace FoodDeliveryApp
+    
 {
     public partial class RestaurantProfileWindow : Window
     {
-        private int staffId;
+        //private int staffId;
+        private int restaurantId;
         private string restaurantName;
         private string imagePath = "";
         private string connectionString = "Server=localhost;Database=FoodDeliveryDB;Trusted_Connection=True;";
         private List<MenuItemModel> menuItems = new List<MenuItemModel>();
+        private object restaurantDetails;
 
+        public RestaurantProfileWindow(int restaurantId, string restaurantName)
+        {
+            InitializeComponent();
+           // this.staffId = staffId;
+            this.restaurantId = restaurantId;
+            this.restaurantName = restaurantName;
+            
+            lblRestaurant.Text = restaurantName;
+            LoadMenuItems();
+        }
         public RestaurantProfileWindow()
         {
             InitializeComponent();
@@ -46,24 +63,28 @@ namespace FoodDeliveryApp
                 MessageBox.Show("Please enter valid item name and price.");
                 return;
             }
+            string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
 
-                string query = "INSERT INTO MenuItems (RestaurantId, ItemName, Price, Description, ImagePath)\n                                SELECT RestaurantId, @item, @price, @desc, @img FROM Restaurants WHERE StaffId = @staffId";
+                string query = "INSERT INTO MenuItems (RestaurantName,RestaurantDetails,RestaurantId, ItemName, Price, Description, ImagePath)\n    SELECT @restaurantName, @restaurantId,@restaurantDetails, @item, @price, @desc, @img FROM MenuItems ";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
+                    cmd.Parameters.AddWithValue("@RestaurantName", restaurantName);
+                    cmd.Parameters.AddWithValue("@RestaurantId", restaurantId);
+                    cmd.Parameters.AddWithValue("@RestaurantDetails", restaurantDetails);
                     cmd.Parameters.AddWithValue("@item", itemName);
                     cmd.Parameters.AddWithValue("@price", price);
                     cmd.Parameters.AddWithValue("@desc", description);
                     cmd.Parameters.AddWithValue("@img", imagePath);
-                    cmd.Parameters.AddWithValue("@staffId", staffId);
+                    //cmd.Parameters.AddWithValue("@staffId", staffId);
 
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Menu item added successfully.");
-
+                    
                     ClearInputs();
                     LoadMenuItems();
                 }
@@ -82,7 +103,7 @@ namespace FoodDeliveryApp
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@staffId", staffId);
+                    //cmd.Parameters.AddWithValue("@staffId", staffId);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -160,9 +181,14 @@ namespace FoodDeliveryApp
 
     public class MenuItemModel
     {
+         public string RestaurantName { get; set; } 
+        public string RestaurantDetails { get; set; }
+        public int RestaurantId { get; set; }
         public int MenuItemId { get; set; }
         public string ItemName { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
     }
-}
+    
+
+    }
