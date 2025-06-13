@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,6 +15,7 @@ namespace FoodDeliveryApp
         {
             InitializeComponent();
             LoadDeliveries();
+            DataContext = this; // For data binding (especially ComboBox ItemsSource)
         }
 
         private void LoadDeliveries()
@@ -23,7 +25,8 @@ namespace FoodDeliveryApp
                 new DeliveryModel { OrderId = 101, CustomerName = "John", Status = "Pending", AssignedTo = null },
                 new DeliveryModel { OrderId = 102, CustomerName = "Lily", Status = "Dispatched", AssignedTo = "Ravi" }
             };
-            dgDeliveries.ItemsSource = Deliveries; // Redundant now due to DataContext, but kept for clarity
+
+            dgDeliveries.ItemsSource = Deliveries;
         }
 
         private void AssignDelivery_Click(object sender, RoutedEventArgs e)
@@ -32,23 +35,24 @@ namespace FoodDeliveryApp
             {
                 try
                 {
-                    string selectedStaff = selected.AssignedTo; // Now gets from ComboBox selection
+                    string selectedStaff = selected.AssignedTo;
+
                     if (string.IsNullOrEmpty(selectedStaff) || !DeliveryStaffList.Contains(selectedStaff))
-                    {
                         throw new ArgumentException("Please select a valid delivery person.");
-                    }
+
                     _controller.AssignDelivery(selected, selectedStaff);
                     dgDeliveries.Items.Refresh();
-                    MessageBox.Show($"Assigned {selectedStaff} to Order {selected.OrderId}.");
+
+                    MessageBox.Show($"✅ Assigned {selectedStaff} to Order #{selected.OrderId}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (ArgumentException ex)
                 {
-                    MessageBox.Show($"Error: {ex.Message}");
+                    MessageBox.Show($"⚠️ Error: {ex.Message}", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("Select an order to assign.");
+                MessageBox.Show("Please select an order to assign.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -58,29 +62,33 @@ namespace FoodDeliveryApp
             {
                 try
                 {
-                    _controller.UpdateDeliveryStatus(selected, "Delivered"); // Could add a UI for status selection
+                    _controller.UpdateDeliveryStatus(selected, "Delivered");
                     dgDeliveries.Items.Refresh();
-                    MessageBox.Show($"Updated status of Order {selected.OrderId} to Delivered.");
+
+                    MessageBox.Show($"📦 Order #{selected.OrderId} marked as Delivered.", "Status Updated", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (ArgumentException ex)
                 {
-                    MessageBox.Show($"Error: {ex.Message}");
+                    MessageBox.Show($"⚠️ Error: {ex.Message}", "Update Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("Select an order to update.");
+                MessageBox.Show("Please select an order to update.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-    }
-}
 
-public class DeliveryModel
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+    }
+
+    public class DeliveryModel
     {
         public int OrderId { get; set; }
         public string CustomerName { get; set; }
         public string Status { get; set; }
         public string AssignedTo { get; set; }
-        public List<string> DeliveryStaffList { get; set; }
     }
-
+}
