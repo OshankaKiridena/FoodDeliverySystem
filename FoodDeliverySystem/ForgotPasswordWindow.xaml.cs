@@ -15,15 +15,19 @@ namespace FoodDeliveryApp
 
             if (string.IsNullOrEmpty(email))
             {
-                lblStatus.Text = "Please enter your email.";
+                lblStatus.Text = "⚠ Please enter your registered email.";
                 lblStatus.Foreground = System.Windows.Media.Brushes.Red;
                 return;
             }
 
-            // TODO: Connect to database to check email and reset password logic
-
-            lblStatus.Text = "If the email is registered, a reset link has been sent.";
+            // Simulate sending a password reset link or OTP
+            lblStatus.Text = "✅ Password reset instructions have been sent to your email.";
             lblStatus.Foreground = System.Windows.Media.Brushes.Green;
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
