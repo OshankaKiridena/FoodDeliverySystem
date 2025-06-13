@@ -7,7 +7,8 @@ namespace FoodDeliveryApp
     public partial class DeliveryTrackingWindow : Window
     {
         public List<DeliveryModel> Deliveries { get; set; } = new();
-        public List<string> DeliveryStaffList { get; set; } = new() { "Ravi", "Amal", "Nimesh" };
+        private readonly DeliveryController _controller = new();
+        public List<string> DeliveryStaffList { get; } = new() { "Ravi", "Amal", "Nimesh" };
 
         public DeliveryTrackingWindow()
         {
@@ -22,20 +23,28 @@ namespace FoodDeliveryApp
                 new DeliveryModel { OrderId = 101, CustomerName = "John", Status = "Pending", AssignedTo = null },
                 new DeliveryModel { OrderId = 102, CustomerName = "Lily", Status = "Dispatched", AssignedTo = "Ravi" }
             };
-
-            foreach (var delivery in Deliveries)
-            {
-                delivery.DeliveryStaffList = DeliveryStaffList;
-            }
-
-            dgDeliveries.ItemsSource = Deliveries;
+            dgDeliveries.ItemsSource = Deliveries; // Redundant now due to DataContext, but kept for clarity
         }
 
         private void AssignDelivery_Click(object sender, RoutedEventArgs e)
         {
             if (dgDeliveries.SelectedItem is DeliveryModel selected)
             {
-                MessageBox.Show($"Assigned {selected.AssignedTo} to Order {selected.OrderId}.");
+                try
+                {
+                    string selectedStaff = selected.AssignedTo; // Now gets from ComboBox selection
+                    if (string.IsNullOrEmpty(selectedStaff) || !DeliveryStaffList.Contains(selectedStaff))
+                    {
+                        throw new ArgumentException("Please select a valid delivery person.");
+                    }
+                    _controller.AssignDelivery(selected, selectedStaff);
+                    dgDeliveries.Items.Refresh();
+                    MessageBox.Show($"Assigned {selectedStaff} to Order {selected.OrderId}.");
+                }
+                catch (ArgumentException ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                }
             }
             else
             {
@@ -47,9 +56,16 @@ namespace FoodDeliveryApp
         {
             if (dgDeliveries.SelectedItem is DeliveryModel selected)
             {
-                selected.Status = "Delivered";
-                dgDeliveries.Items.Refresh();
-                MessageBox.Show($"Updated status of Order {selected.OrderId} to Delivered.");
+                try
+                {
+                    _controller.UpdateDeliveryStatus(selected, "Delivered"); // Could add a UI for status selection
+                    dgDeliveries.Items.Refresh();
+                    MessageBox.Show($"Updated status of Order {selected.OrderId} to Delivered.");
+                }
+                catch (ArgumentException ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                }
             }
             else
             {
@@ -57,8 +73,9 @@ namespace FoodDeliveryApp
             }
         }
     }
+}
 
-    public class DeliveryModel
+public class DeliveryModel
     {
         public int OrderId { get; set; }
         public string CustomerName { get; set; }
@@ -66,4 +83,4 @@ namespace FoodDeliveryApp
         public string AssignedTo { get; set; }
         public List<string> DeliveryStaffList { get; set; }
     }
-}
+

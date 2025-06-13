@@ -10,7 +10,7 @@ namespace FoodDeliverySystem
         private const int Iterations = 100000;
         private const int SaltSize = 16; // 128-bit salt
         private const int HashSize = 32; // 256-bit hash
-
+        
         /// <summary>
         /// Hashes a password with a randomly generated salt
         /// </summary>
