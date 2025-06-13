@@ -1,7 +1,8 @@
-﻿using System;
-using System.Windows;
-using System.Configuration;
+﻿using FoodDeliverySystem;
 using Microsoft.Data.SqlClient;
+using System;
+using System.Configuration;
+using System.Windows;
 
 namespace FoodDeliveryApp
 {
@@ -18,6 +19,7 @@ namespace FoodDeliveryApp
             string username = txtUsername.Text.Trim();
             string customeraddress = txtAddress.Text.Trim();
             string password = txtPassword.Password.Trim();
+            string hashedPassword = PasswordHasher.HashPassword(password);
             string confirmPassword = txtConfirmPassword.Password.Trim();
 
             if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(username) ||
@@ -62,7 +64,9 @@ namespace FoodDeliveryApp
                     else
                         lblMessage.Text = "Database error: " + ex.Message;
                 }
+
             }
         }
     }
 }
+
