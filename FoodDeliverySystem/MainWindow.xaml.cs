@@ -18,21 +18,23 @@ namespace FoodDeliveryApp
         }
 
         // Open Restaurants window
-       // private void Restaurants_Click(object sender, RoutedEventArgs e)
-        //{
-           // RestaurantWindow restaurantWindow = new RestaurantWindow();
-           // restaurantWindow.ShowDialog();
-        //}
+        // private void Restaurants_Click(object sender, RoutedEventArgs e)
+        // {
+        //     RestaurantWindow restaurantWindow = new RestaurantWindow();
+        //     restaurantWindow.ShowDialog();
+        // }
 
         // Exit app
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
+
         private void StaffLogin_Click(object sender, RoutedEventArgs e)
         {
             RestaurantLogin staffLogin = new RestaurantLogin();
             staffLogin.Show();
+            this.Close();
         }
     }
 }

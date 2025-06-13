@@ -18,7 +18,7 @@
                     Click="Restaurants_Click" Background="#FF3FA9F5" Foreground="White" FontWeight="Bold"/>
             <Button Content="Menu Items" Width="200" Height="40" Margin="0 5" IsEnabled="False"/>
             <Button Content="Orders" Width="200" Height="40" Margin="0 5" IsEnabled="False"/>
-            <Button Content="Deliveries" Width="200" Height="46" Margin="0 5" IsEnabled="False"/>
+            <Button Content="Deliveries" Width="200" Height="46" Margin="0 5" IsEnabled="False" Click="Button_Click"/>
         </StackPanel>
     </Grid>
 </Window>
