@@ -1,43 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Collections.Generic;
 
-namespace FoodDeliverySystem
+namespace FoodDeliveryApp
 {
-     //<summary>
-     //Interaction logic for RestaurantWindow.xaml
-     //</summary>
     public partial class RestaurantWindow : Window
     {
-        // Adding the missing 'Cart' property to fix CS0117 error
-        public static List<CartItem> Cart { get; set; } = new List<CartItem>();
+        public RestaurantWindow()
+        {
+            InitializeComponent();
+            LoadRestaurants();
+        }
+
+        public class Restaurant
+        {
+            public string Name { get; set; }
+            public string Description { get; set; }
+        }
+
+        private List<Restaurant> restaurantList = new();
+
+        private void LoadRestaurants()
+        {
+            restaurantList = new List<Restaurant>
+            {
+                new Restaurant { Name = "The Food Hub", Description = "Multi-cuisine restaurant" },
+                new Restaurant { Name = "Green Eatery", Description = "Healthy food options" },
+                new Restaurant { Name = "Spicy Treats", Description = "South Asian flavors" },
+                new Restaurant { Name = "Ocean Grill", Description = "Seafood special" }
+            };
+
+            lvRestaurants.ItemsSource = restaurantList;
+            txtTotalCount.Text = restaurantList.Count.ToString();
+            txtActiveCount.Text = "3"; // Set dynamically if you have "Status" property
+        }
+
+        // ✅ Handles Close button click
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        // ✅ Refreshes restaurant list
+        private void RefreshList_Click(object sender, RoutedEventArgs e)
+        {
+            LoadRestaurants();
+            MessageBox.Show("Restaurant list refreshed.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        // ✅ Shows details of selected restaurant
+        private void ViewDetails_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvRestaurants.SelectedItem is Restaurant selected)
+            {
+                MessageBox.Show($"📋 {selected.Name}\n\n{selected.Description}", "Details", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Please select a restaurant to view details.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
     }
-   
-
-    // Assuming a CartItem class exists or needs to be defined
-    public class CartItem
-    {
-        public string ItemName { get; set; }
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
-        public decimal Total => Price * Quantity;
-    }
-
-
-
-
 }
-
-

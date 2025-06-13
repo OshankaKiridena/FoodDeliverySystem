@@ -1,24 +1,332 @@
 ﻿<Window x:Class="FoodDeliveryApp.RestaurantWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Available Restaurants" Height="550" Width="700"
-        WindowStartupLocation="CenterScreen" Background="#F7F9FB">
-    <Border Margin="20" Padding="20" Background="White" CornerRadius="12" BorderBrush="#D3D3D3" BorderThickness="1">
-        <DockPanel>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0 0 0 15" HorizontalAlignment="Center">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="26" Foreground="#2D8CFF" Margin="0 0 10 0" />
-                <TextBlock Text="Registered Restaurants" FontSize="24" FontWeight="Bold" Foreground="#2D8CFF"/>
-            </StackPanel>
+        Title="Available Restaurants" Height="650" Width="900"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        ResizeMode="CanResize">
 
-            <ListView x:Name="lvRestaurants" Margin="0" Height="420" Background="#FAFAFA" >
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Restaurant Name" Width="250" DisplayMemberBinding="{Binding Name}" />
-                        
-                        <GridViewColumn Header="Description" Width="220" DisplayMemberBinding="{Binding Description}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </DockPanel>
-    </Border>
+    <Window.Resources>
+        <!-- Gradient Brushes -->
+        <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#667EEA" Offset="0"/>
+            <GradientStop Color="#764BA2" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#4ECDC4" Offset="0"/>
+            <GradientStop Color="#44A08D" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF6B6B" Offset="0"/>
+            <GradientStop Color="#EE5A24" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="ButtonGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#2196F3" Offset="0"/>
+            <GradientStop Color="#1976D2" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Storyboard for Icon Animation -->
+        <Storyboard x:Key="IconPulseStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" 
+                             From="1" To="1.1" Duration="0:0:1" AutoReverse="True"/>
+            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" 
+                             From="1" To="1.1" Duration="0:0:1" AutoReverse="True"/>
+        </Storyboard>
+
+        <!-- ListView Header Style -->
+        <Style x:Key="ModernListViewHeaderStyle" TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="{StaticResource HeaderGradient}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewColumnHeader">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0,0,1,0"
+                                BorderBrush="Aqua">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#4ECDC4" Opacity="0.3" ShadowDepth="3" BlurRadius="8"/>
+                            </Border.Effect>
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Inside your ListViewItem Style -->
+        <Style x:Key="ModernListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="Height" Value="65"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="ItemBorder" 
+                        Background="{TemplateBinding Background}"
+                        Padding="{TemplateBinding Padding}"
+                        Margin="5,2"
+                        CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black" Opacity="0" ShadowDepth="2" BlurRadius="8"/>
+                            </Border.Effect>
+                            <GridViewRowPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#F0F8FF"/>
+                                <Setter TargetName="ItemBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="-2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#E3F2FD"/>
+                                <Setter TargetName="ItemBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Black" Opacity="0.2" ShadowDepth="2" BlurRadius="8"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="#1976D2"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern Button Style -->
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonGradient}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="MinWidth" Value="140"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="ButtonBorder" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                BorderThickness="0">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#2196F3" Opacity="0.3" ShadowDepth="4" BlurRadius="12"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="-2"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="ButtonBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#2196F3" Opacity="0.5" ShadowDepth="6" BlurRadius="15"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="1"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Close Button Style -->
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="CloseButtonBorder" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CloseButtonBorder" Property="Background" Value="#FF4444"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main Container with Gradient Background -->
+    <Grid Background="{StaticResource BackgroundGradient}">
+        <!-- Content Card -->
+        <Border Background="White" 
+                CornerRadius="20" 
+                Margin="30"
+                Padding="0">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.2" ShadowDepth="20" BlurRadius="40"/>
+            </Border.Effect>
+
+            <Grid>
+                <!-- Header Section -->
+                <Border Background="{StaticResource HeaderGradient}" 
+                        CornerRadius="20,20,0,0" 
+                        Height="100" 
+                        VerticalAlignment="Top">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#4ECDC4" Opacity="0.4" ShadowDepth="8" BlurRadius="15"/>
+                    </Border.Effect>
+
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <!-- Animated Restaurant Icon -->
+                        <Border Width="50" Height="50" 
+                                Background="{StaticResource AccentGradient}"
+                                CornerRadius="25"
+                                Margin="0,0,15,0">
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#FF6B6B" Opacity="0.5" ShadowDepth="6" BlurRadius="15"/>
+                            </Border.Effect>
+                            <Border.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard Storyboard="{StaticResource IconPulseStoryboard}"/>
+                                </EventTrigger>
+                            </Border.Triggers>
+                            <TextBlock Text="🏪" FontSize="24" 
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- Header Text -->
+                        <StackPanel>
+                            <TextBlock Text="Available Restaurants" 
+                                       Foreground="White" 
+                                       FontSize="26" 
+                                       FontWeight="Bold"/>
+                            <TextBlock Text="Discover amazing dining experiences" 
+                                       Foreground="White" 
+                                       FontSize="13" 
+                                       Opacity="0.9"
+                                       Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Main Content Area -->
+                <DockPanel Margin="30,120,30,30">
+                    <!-- Statistics Bar -->
+                    <Border DockPanel.Dock="Top" 
+                            Background="#F8F9FA" 
+                            CornerRadius="10" 
+                            Padding="20,15" 
+                            Margin="0,0,0,25">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.05" ShadowDepth="3" BlurRadius="10"/>
+                        </Border.Effect>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,30,0">
+                                <Ellipse Width="12" Height="12" Fill="#00D4AA" Margin="0,0,8,0"/>
+                                <TextBlock Text="Active Restaurants: " FontWeight="SemiBold" Foreground="#6C757D"/>
+                                <TextBlock x:Name="txtActiveCount" Text="0" FontWeight="Bold" Foreground="#00D4AA"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="12" Height="12" Fill="#FF6B6B" Margin="0,0,8,0"/>
+                                <TextBlock Text="Total Listed: " FontWeight="SemiBold" Foreground="#6C757D"/>
+                                <TextBlock x:Name="txtTotalCount" Text="0" FontWeight="Bold" Foreground="#FF6B6B"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Action Buttons -->
+                    <StackPanel DockPanel.Dock="Bottom" 
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Center" 
+                                Margin="0,25,0,0">
+                        <Button Content="🔄 Refresh List" 
+                                Style="{StaticResource ModernButtonStyle}" 
+                                Margin="0,0,15,0"
+                                Click="RefreshList_Click"/>
+                        <Button Content="📋 View Details" 
+                                Style="{StaticResource ModernButtonStyle}" 
+                                Click="ViewDetails_Click"/>
+                    </StackPanel>
+
+                    <!-- Restaurant List -->
+                    <Border Background="#FAFBFC" 
+                            CornerRadius="12" 
+                            Padding="0">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="5" BlurRadius="15"/>
+                        </Border.Effect>
+
+                        <ListView x:Name="lvRestaurants"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ItemContainerStyle="{StaticResource ModernListViewItemStyle}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="🏪 Restaurant Name" 
+                                                    Width="350" 
+                                                    DisplayMemberBinding="{Binding Name}" 
+                                                    HeaderContainerStyle="{StaticResource ModernListViewHeaderStyle}"/>
+                                    <GridViewColumn Header="📝 Description" 
+                                                    Width="400" 
+                                                    DisplayMemberBinding="{Binding Description}" 
+                                                    HeaderContainerStyle="{StaticResource ModernListViewHeaderStyle}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Border>
+                </DockPanel>
+            </Grid>
+        </Border>
+
+        <!-- Close Button -->
+        <Button Content="✕" 
+                Style="{StaticResource CloseButtonStyle}"
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Top" 
+                Margin="40,40,0,0"
+                Click="Close_Click"/>
+    </Grid>
 </Window>
