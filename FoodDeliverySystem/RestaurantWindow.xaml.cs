@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,19 +15,18 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 
-namespace FoodDeliverySystem
+namespace FoodDeliveryApp
 {
-     //<summary>
-     //Interaction logic for RestaurantWindow.xaml
-     //</summary>
     public partial class RestaurantWindow : Window
     {
-        // Adding the missing 'Cart' property to fix CS0117 error
         public static List<CartItem> Cart { get; set; } = new List<CartItem>();
-    }
-   
 
-    // Assuming a CartItem class exists or needs to be defined
+        public RestaurantWindow()
+        {
+            InitializeComponent(); // THIS loads the XAML UI!
+        }
+    }
+
     public class CartItem
     {
         public string ItemName { get; set; }
@@ -34,10 +34,10 @@ namespace FoodDeliverySystem
         public int Quantity { get; set; }
         public decimal Total => Price * Quantity;
     }
-
-
-
-
 }
+    
+
+
+
 
 

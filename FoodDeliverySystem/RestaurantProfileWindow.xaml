@@ -39,9 +39,26 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 10 0 10">
-                    <Button Content="Add Menu Item" Width="130" Background="Green" Foreground="White" Click="AddMenuItem_Click" Margin="0 0 10 0"/>
-                    <Button Content="Update Selected" Width="130" Background="#FFA500" Foreground="White" Click="UpdateMenuItem_Click"/>
+                    <Button Content="Add Menu Item"
+            Width="130"
+            Background="Green"
+            Foreground="White"
+            Click="AddMenuItem_Click"
+            Margin="0 0 10 0"/>
+                    <Button Content="Update Selected"
+            Width="130"
+            Background="#FFA500"
+            Foreground="White"
+            Click="UpdateMenuItem_Click"
+            Margin="0 0 10 0"/>
+                    <!-- New Delivery Management Button -->
+                    <Button Content="Delivery Management"
+            Width="160"
+            Background="#2D8CFF"
+            Foreground="White"
+            Click="DeliveryManagement_Click"/>
                 </StackPanel>
+
                 <TextBlock Text="Current Menu:" FontWeight="Bold"/>
                 <DataGrid x:Name="dataGridMenu" Height="233" AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dataGridMenu_SelectionChanged" Width="614">
                     <DataGrid.Columns>

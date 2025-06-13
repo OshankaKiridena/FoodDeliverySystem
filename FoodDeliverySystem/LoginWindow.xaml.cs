@@ -6,6 +6,7 @@ using System.Windows;
 
 namespace FoodDeliveryApp
 {
+    // Inheritance: LoginWindow inherits from WPF's Window class
     public partial class LoginWindow : Window
     {
         public LoginWindow()
@@ -44,9 +45,9 @@ namespace FoodDeliveryApp
 
                 if (count == 1)
                 {
-                    
-                    
-                    
+
+
+                    // Polymorphism: Any window (DashboardWindow here) can be shown via Show()
                     DashboardWindow dashboard = new DashboardWindow();
                     dashboard.Show();
                     this.Close();
@@ -68,8 +69,11 @@ namespace FoodDeliveryApp
 
         private void ForgotPassword_Click(object sender, RoutedEventArgs e)
         {
+            ForgotPasswordWindow page = new ForgotPasswordWindow();
+            page.ShowDialog();
 
         }
+        
         public partial class DisplayRestaurants : Window
         {
            

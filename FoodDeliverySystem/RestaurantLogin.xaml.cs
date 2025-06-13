@@ -13,7 +13,7 @@ namespace FoodDeliveryApp;
         {
             InitializeComponent();
         }
-
+    //Encapsulation used for the event handler login
     private void Login_Click(object sender, RoutedEventArgs e)
     {
         string username = txtUsername.Text.Trim();
@@ -24,7 +24,7 @@ namespace FoodDeliveryApp;
             lblError.Text = "Please enter both username and password.";
             return;
         }
-
+        // Abstraction: database connection details are hidden from UI code
         // ✅ Use connection string from App.config
         string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
 

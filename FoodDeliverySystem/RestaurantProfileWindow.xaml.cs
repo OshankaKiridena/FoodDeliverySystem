@@ -12,7 +12,7 @@ using System.Configuration;
 using System.Windows.Media.Imaging;
 
 namespace FoodDeliveryApp
-    
+
 {
     public partial class RestaurantProfileWindow : Window
     {
@@ -27,10 +27,10 @@ namespace FoodDeliveryApp
         public RestaurantProfileWindow(int restaurantId, string restaurantName)
         {
             InitializeComponent();
-           // this.staffId = staffId;
+            // this.staffId = staffId;
             this.restaurantId = restaurantId;
             this.restaurantName = restaurantName;
-            
+
             lblRestaurant.Text = restaurantName;
             LoadMenuItems();
         }
@@ -84,7 +84,7 @@ namespace FoodDeliveryApp
 
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Menu item added successfully.");
-                    
+
                     ClearInputs();
                     LoadMenuItems();
                 }
@@ -177,18 +177,27 @@ namespace FoodDeliveryApp
             imgPreview.Source = null;
             imagePath = "";
         }
+
+        private void DeliveryManagement_Click(object sender, RoutedEventArgs e)
+        {
+            DeliveryTrackingWindow page = new DeliveryTrackingWindow();
+            page.ShowDialog();
+        }
     }
 
     public class MenuItemModel
     {
-         public string RestaurantName { get; set; } 
+        public string RestaurantName { get; set; }
         public string RestaurantDetails { get; set; }
         public int RestaurantId { get; set; }
         public int MenuItemId { get; set; }
         public string ItemName { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
-    }
-    
 
+        
     }
+}
+
+
+    
