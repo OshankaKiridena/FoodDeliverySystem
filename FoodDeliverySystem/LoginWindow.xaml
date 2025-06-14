@@ -1,7 +1,7 @@
 ﻿<Window x:Class="FoodDeliveryApp.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Login - Food Delivery System" Height="550" Width="450"
+        Title="Login - Food Delivery System" Height="537" Width="650"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         AllowsTransparency="True" WindowStyle="None">
 
@@ -197,7 +197,7 @@
         <!-- Main Content Container -->
         <Border Background="#F5FFFFFF" 
                 CornerRadius="20" 
-                Margin="32,50,50,63"
+                Margin="81,59,130,101"
                 Padding="40">
             <Border.Effect>
                 <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="20" BlurRadius="40"/>

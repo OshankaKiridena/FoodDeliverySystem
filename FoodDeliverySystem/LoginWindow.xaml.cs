@@ -54,6 +54,7 @@ namespace FoodDeliveryApp
                 else
                 {
                     lblError.Text = "Invalid username or password.";
+                    ErrorPanel.Visibility = Visibility.Visible;
                 }
             }
         }
