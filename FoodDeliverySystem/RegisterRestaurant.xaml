@@ -1,36 +1,114 @@
 ﻿<Window x:Class="FoodDeliveryApp.RegisterRestaurant"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Register Restaurant" Height="600" Width="500"
-        WindowStartupLocation="CenterScreen" Background="#FFF5F5F5">
+        Title="Register Restaurant" Height="620" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent">
 
-    <Grid Margin="20">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <TextBlock Text="Register Restaurant Profile" FontSize="22" FontWeight="Bold"
-                           Foreground="#2D8CFF" TextAlignment="Center" Margin="0 0 0 20"/>
+    <Window.Resources>
+        <!-- Gradient Background -->
+        <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF667EEA" Offset="0"/>
+            <GradientStop Color="#FF764BA2" Offset="1"/>
+        </LinearGradientBrush>
 
-                <TextBlock Text="Restaurant Name:"/>
-                <TextBox x:Name="txtRestaurantName" Height="30" Margin="0 0 0 10"/>
+        <!-- Primary Button Style -->
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#2D8CFF"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black" Opacity="0.2" ShadowDepth="4" BlurRadius="10"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-                <TextBlock Text="Description:"/>
-                <TextBox x:Name="txtDescription" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0 0 0 10"/>
+    <Grid Background="{StaticResource BackgroundGradient}">
+        <Border Background="#F8FFFFFF"
+                CornerRadius="20"
+                Padding="25"
+                Margin="30">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.15" ShadowDepth="8" BlurRadius="20"/>
+            </Border.Effect>
 
-                
+            <Grid>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,12,0,-12">
+                    <StackPanel>
 
-                <TextBlock Text="Set Username:"/>
-                <TextBox x:Name="txtUsername" Height="30" Margin="0 0 0 10"/>
+                        <!-- Header -->
+                        <TextBlock Text="🍽️ Register Restaurant Profile"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#2D8CFF"
+                                   Margin="0,0,0,20"
+                                   TextAlignment="Center"/>
 
-                <TextBlock Text="Set Password:"/>
-                <PasswordBox x:Name="txtPassword" Height="30" Margin="0 0 0 20"/>
+                        <!-- Input Fields -->
+                        <TextBlock Text="Restaurant Name:"/>
+                        <TextBox x:Name="txtRestaurantName" Height="30" Margin="0,0,0,10"/>
 
-                <Button Content="Register Restaurant" Height="40" Background="#2D8CFF" Foreground="White"
-                        Click="Register_Click"/>
+                        <TextBlock Text="Description:"/>
+                        <TextBox x:Name="txtDescription" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
 
-                <TextBlock x:Name="lblStatus" Foreground="Green" Margin="0 15 0 0" TextAlignment="Center"/>
-                <TextBlock x:Name="lblMessage" Foreground="Red" Margin="0 10 0 0" TextAlignment="Center"/>
+                        <TextBlock Text="Set Username:"/>
+                        <TextBox x:Name="txtUsername" Height="30" Margin="0,0,0,10"/>
 
-            </StackPanel>
-        </ScrollViewer>
+                        <TextBlock Text="Set Password:"/>
+                        <PasswordBox x:Name="txtPassword" Height="30" Margin="0,0,0,20"/>
+
+                        <!-- Submit Button -->
+                        <Button Content="Register Restaurant"
+                                Style="{StaticResource PrimaryButton}"
+                                Click="Register_Click"/>
+
+                        <!-- Feedback Text -->
+                        <TextBlock x:Name="lblStatus"
+                                   Foreground="Green"
+                                   TextAlignment="Center"
+                                   FontWeight="Bold"
+                                   Margin="0,15,0,0"/>
+
+                        <TextBlock x:Name="lblMessage"
+                                   Foreground="Red"
+                                   TextAlignment="Center"
+                                   FontWeight="Normal"
+                                   Margin="0,10,0,0"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Close Button -->
+                <Button Content="✕"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,-9,-3,0"
+                        Width="16"
+                        Height="22"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Foreground="Gray"
+                        FontSize="16"
+                        Cursor="Hand"
+                        Click="Close_Click"/>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

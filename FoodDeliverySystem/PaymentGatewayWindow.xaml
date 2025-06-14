@@ -1,23 +1,136 @@
 ﻿<Window x:Class="FoodDeliveryApp.PaymentGatewayWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Payment Gateway" Height="395" Width="426"
-        WindowStartupLocation="CenterScreen" Background="White">
-    <Grid Margin="25">
-        <StackPanel Margin="0,0,0,-16">
-            <TextBlock Text="Payment Gateway" FontSize="22" FontWeight="Bold" Foreground="#2D8CFF" Margin="0 0 0 18" HorizontalAlignment="Center"/>
+        Title="Payment Gateway" Height="500" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent">
 
-            <TextBlock Text="Card Number:" Margin="0 0 0 4"/>
-            <TextBox x:Name="txtCard" Margin="0 0 0 12" Height="32" FontSize="16" />
+    <Window.Resources>
+        <!-- Gradient Background -->
+        <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#667EEA" Offset="0"/>
+            <GradientStop Color="#764BA2" Offset="1"/>
+        </LinearGradientBrush>
 
-            <TextBlock Text="Card Holder Name:" Margin="0 0 0 4"/>
-            <TextBox x:Name="txtHolder" Margin="0 0 0 12" Height="32" FontSize="16" />
+        <!-- Primary Button -->
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#43A047"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black" Opacity="0.2" ShadowDepth="3" BlurRadius="10"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-            <TextBlock Text="CVV:" Margin="0 0 0 4"/>
-            <PasswordBox x:Name="txtCVV" Margin="0 0 0 16" Height="32" FontSize="16" Width="80"/>
+    <Grid Background="{StaticResource BackgroundGradient}">
+        <Border Background="#F8FFFFFF" CornerRadius="20" Margin="30" Padding="25">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.15" ShadowDepth="8" BlurRadius="25"/>
+            </Border.Effect>
 
-            <Button Content="Confirm Payment" Width="180" Height="38" Background="#43A047" Foreground="White" FontWeight="Bold"
-                    Click="ConfirmPayment_Click" HorizontalAlignment="Center"/>
-        </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                    <TextBlock Text="🔐 Secure Payment"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="#2D8CFF"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Enter your card details to complete the transaction"
+                               FontSize="13"
+                               Foreground="#666"
+                               Margin="0,5,0,0"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Form -->
+                <StackPanel Grid.Row="1" Margin="10,0,10,10">
+                    <!-- Card Number -->
+                    <TextBlock Text="Card Number:" FontWeight="SemiBold" />
+                    <TextBox x:Name="txtCard"
+                             Height="35"
+                             FontSize="15"
+                             Margin="0,0,0,0"/>
+                    <TextBlock Text="Example: 1234 5678 9012 3456" FontSize="11" Foreground="#999" Margin="4,-8,0,10"/>
+
+                    <!-- Card Holder Name -->
+                    <TextBlock Text="Card Holder Name:" FontWeight="SemiBold"/>
+                    <TextBox x:Name="txtHolder"
+                             Height="35"
+                             FontSize="15"
+                             Margin="0,0,0,10"/>
+
+                    <!-- Row with Expiry & CVV -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Expiry Date -->
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Expiry (MM/YY):" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtExpiry"
+                                     Height="35"
+                                     FontSize="15"/>
+                            <TextBlock Text="Format: MM/YY" FontSize="11" Foreground="#999" Margin="4,-8,0,0" Height="36" Width="168"/>
+                        </StackPanel>
+
+                        <!-- CVV -->
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="CVV:" FontWeight="SemiBold"/>
+                            <PasswordBox x:Name="txtCVV"
+                                         Height="35"
+                                         FontSize="15"
+                                         Width="100"
+                                         HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Confirm Button -->
+                    <Button Content="Confirm Payment"
+                            Style="{StaticResource PrimaryButton}"
+                            Click="ConfirmPayment_Click"/>
+                </StackPanel>
+
+                <!-- Close Button -->
+                <Button Content="✕"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="5"
+                        Width="30"
+                        Height="30"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Foreground="Gray"
+                        FontSize="16"
+                        Cursor="Hand"
+                        Click="Close_Click"/>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

@@ -1,19 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Collections.Generic;
 
 namespace FoodDeliveryApp
 {
@@ -37,7 +25,45 @@ namespace FoodDeliveryApp
 }
     
 
+        private void LoadRestaurants()
+        {
+            restaurantList = new List<Restaurant>
+            {
+                new Restaurant { Name = "The Food Hub", Description = "Multi-cuisine restaurant" },
+                new Restaurant { Name = "Green Eatery", Description = "Healthy food options" },
+                new Restaurant { Name = "Spicy Treats", Description = "South Asian flavors" },
+                new Restaurant { Name = "Ocean Grill", Description = "Seafood special" }
+            };
 
+            lvRestaurants.ItemsSource = restaurantList;
+            txtTotalCount.Text = restaurantList.Count.ToString();
+            txtActiveCount.Text = "3"; // Set dynamically if you have "Status" property
+        }
 
+        // ✅ Handles Close button click
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
 
+        // ✅ Refreshes restaurant list
+        private void RefreshList_Click(object sender, RoutedEventArgs e)
+        {
+            LoadRestaurants();
+            MessageBox.Show("Restaurant list refreshed.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
 
+        // ✅ Shows details of selected restaurant
+        private void ViewDetails_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvRestaurants.SelectedItem is Restaurant selected)
+            {
+                MessageBox.Show($"📋 {selected.Name}\n\n{selected.Description}", "Details", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Please select a restaurant to view details.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+    }
+}

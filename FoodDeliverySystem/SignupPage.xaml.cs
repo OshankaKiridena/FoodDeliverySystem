@@ -1,7 +1,8 @@
-﻿using System;
-using System.Windows;
-using System.Configuration;
+﻿using FoodDeliverySystem;
 using Microsoft.Data.SqlClient;
+using System;
+using System.Configuration;
+using System.Windows;
 
 namespace FoodDeliveryApp
 {
@@ -9,60 +10,65 @@ namespace FoodDeliveryApp
     {
         public SignupPage()
         {
-            InitializeComponent(); // ✅ DO NOT remove or override this method
+            InitializeComponent();
         }
 
         private void SignUp_Click(object sender, RoutedEventArgs e)
         {
             string fullName = txtFullName.Text.Trim();
             string username = txtUsername.Text.Trim();
-            string customeraddress = txtAddress.Text.Trim();
+            string customerAddress = txtAddress.Text.Trim();
             string password = txtPassword.Password.Trim();
             string confirmPassword = txtConfirmPassword.Password.Trim();
 
             if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(username) ||
-                string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
+                string.IsNullOrEmpty(customerAddress) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
             {
-                lblMessage.Text = "Please fill in all fields.";
+                lblMessage.Text = "⚠ Please fill in all fields.";
                 return;
             }
 
             if (password != confirmPassword)
             {
-                lblMessage.Text = "Passwords do not match.";
+                lblMessage.Text = "❌ Passwords do not match.";
                 return;
             }
 
+            string hashedPassword = PasswordHasher.HashPassword(password); // 🔐 Hash after confirming
+
             string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                try
-                {
-                    conn.Open();
-                    string insertQuery = "INSERT INTO Users (FullName, Username,Customeraddress,Password) VALUES (@name, @user,@address,@pass)";
+                using SqlConnection conn = new(connectionString);
+                conn.Open();
 
-                    using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", fullName);
-                        cmd.Parameters.AddWithValue("@user", username);
-                        cmd.Parameters.AddWithValue("@address",customeraddress);
-                        cmd.Parameters.AddWithValue("@pass", password); // Consider hashing for security
+                string insertQuery = "INSERT INTO Users (FullName, Username, CustomerAddress, Password) " +
+                                     "VALUES (@name, @user, @address, @pass)";
 
-                        cmd.ExecuteNonQuery();
+                using SqlCommand cmd = new(insertQuery, conn);
+                cmd.Parameters.AddWithValue("@name", fullName);
+                cmd.Parameters.AddWithValue("@user", username);
+                cmd.Parameters.AddWithValue("@address", customerAddress);
+                cmd.Parameters.AddWithValue("@pass", hashedPassword);
 
-                        MessageBox.Show("Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                        this.Close();
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    if (ex.Number == 2627) // Unique constraint violation
-                        lblMessage.Text = "Username already exists!";
-                    else
-                        lblMessage.Text = "Database error: " + ex.Message;
-                }
+                cmd.ExecuteNonQuery();
+
+                MessageBox.Show("🎉 Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
             }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627) // Unique constraint violation
+                    lblMessage.Text = "⚠ Username already exists!";
+                else
+                    lblMessage.Text = $"Database error: {ex.Message}";
+            }
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

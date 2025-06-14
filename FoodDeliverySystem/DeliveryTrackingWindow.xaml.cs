@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -7,12 +8,14 @@ namespace FoodDeliveryApp
     public partial class DeliveryTrackingWindow : Window
     {
         public List<DeliveryModel> Deliveries { get; set; } = new();
-        public List<string> DeliveryStaffList { get; set; } = new() { "Ravi", "Amal", "Nimesh" };
+        private readonly DeliveryController _controller = new();
+        public List<string> DeliveryStaffList { get; } = new() { "Ravi", "Amal", "Nimesh" };
 
         public DeliveryTrackingWindow()
         {
             InitializeComponent();
             LoadDeliveries();
+            DataContext = this; // For data binding (especially ComboBox ItemsSource)
         }
 
         private void LoadDeliveries()
@@ -23,11 +26,6 @@ namespace FoodDeliveryApp
                 new DeliveryModel { OrderId = 102, CustomerName = "Lily", Status = "Dispatched", AssignedTo = "Ravi" }
             };
 
-            foreach (var delivery in Deliveries)
-            {
-                delivery.DeliveryStaffList = DeliveryStaffList;
-            }
-
             dgDeliveries.ItemsSource = Deliveries;
         }
 
@@ -35,11 +33,26 @@ namespace FoodDeliveryApp
         {
             if (dgDeliveries.SelectedItem is DeliveryModel selected)
             {
-                MessageBox.Show($"Assigned {selected.AssignedTo} to Order {selected.OrderId}.");
+                try
+                {
+                    string selectedStaff = selected.AssignedTo;
+
+                    if (string.IsNullOrEmpty(selectedStaff) || !DeliveryStaffList.Contains(selectedStaff))
+                        throw new ArgumentException("Please select a valid delivery person.");
+
+                    _controller.AssignDelivery(selected, selectedStaff);
+                    dgDeliveries.Items.Refresh();
+
+                    MessageBox.Show($"✅ Assigned {selectedStaff} to Order #{selected.OrderId}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (ArgumentException ex)
+                {
+                    MessageBox.Show($"⚠️ Error: {ex.Message}", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
             else
             {
-                MessageBox.Show("Select an order to assign.");
+                MessageBox.Show("Please select an order to assign.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -47,14 +60,27 @@ namespace FoodDeliveryApp
         {
             if (dgDeliveries.SelectedItem is DeliveryModel selected)
             {
-                selected.Status = "Delivered";
-                dgDeliveries.Items.Refresh();
-                MessageBox.Show($"Updated status of Order {selected.OrderId} to Delivered.");
+                try
+                {
+                    _controller.UpdateDeliveryStatus(selected, "Delivered");
+                    dgDeliveries.Items.Refresh();
+
+                    MessageBox.Show($"📦 Order #{selected.OrderId} marked as Delivered.", "Status Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (ArgumentException ex)
+                {
+                    MessageBox.Show($"⚠️ Error: {ex.Message}", "Update Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
             else
             {
-                MessageBox.Show("Select an order to update.");
+                MessageBox.Show("Please select an order to update.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 
@@ -64,6 +90,5 @@ namespace FoodDeliveryApp
         public string CustomerName { get; set; }
         public string Status { get; set; }
         public string AssignedTo { get; set; }
-        public List<string> DeliveryStaffList { get; set; }
     }
 }

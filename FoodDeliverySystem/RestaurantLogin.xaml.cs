@@ -1,12 +1,10 @@
-﻿using FoodDeliverySystem;
+﻿using System;
 using System.Configuration;
-using Microsoft.Data.SqlClient;
-using System.Data.SqlClient;
 using System.Windows;
+using Microsoft.Data.SqlClient;
 
-namespace FoodDeliveryApp;
-
-
+namespace FoodDeliveryApp
+{
     public partial class RestaurantLogin : Window
     {
         public RestaurantLogin()
@@ -28,46 +26,50 @@ namespace FoodDeliveryApp;
         // ✅ Use connection string from App.config
         string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
 
-        using (SqlConnection conn = new SqlConnection(connectionString))
-        {
-            conn.Open();
+                using SqlConnection conn = new(connectionString);
+                conn.Open();
 
-           // string query = "SELECT COUNT(*) FROM Restaurant WHERE Username = @username AND Password = @password";
-            string query = "SELECT id  FROM restaurant WHERE Username = @username AND Password = @password";
-            SqlCommand cmd = new SqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@username", username);
-            cmd.Parameters.AddWithValue("@password", password);
+                string query = "SELECT id FROM restaurant WHERE Username = @username AND Password = @password";
+                using SqlCommand cmd = new(query, conn);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
 
+                using SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    int restaurantId = reader.GetInt32(0);
+                    Application.Current.Properties["RestaurantId"] = restaurantId;
 
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            if (reader.Read())
-            {
-                int restaurantId = reader.GetInt32(0);
-                // After successful login
-                Application.Current.Properties["RestaurantId"] = restaurantId;
-
-                RestaurantProfileWindow dashboard = new RestaurantProfileWindow( );
-               
-                dashboard.Show();
-                this.Close();
+                    RestaurantProfileWindow dashboard = new();
+                    dashboard.Show();
+                    this.Close();
+                }
+                else
+                {
+                    lblError.Text = "❌ Invalid username or password.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                lblError.Text = "Invalid username or password.";
+                MessageBox.Show($"An error occurred while logging in:\n{ex.Message}", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-    }
-    private void Register_Click(object sender, RoutedEventArgs e)
+
+        private void Register_Click(object sender, RoutedEventArgs e)
         {
-            RegisterRestaurant registerWindow = new RegisterRestaurant();
+            RegisterRestaurant registerWindow = new();
             registerWindow.ShowDialog();
         }
 
         private void ForgotPassword_Click(object sender, RoutedEventArgs e)
         {
-            ForgotPasswordWindow forgotWindow = new ForgotPasswordWindow();
+            ForgotPasswordWindow forgotWindow = new();
             forgotWindow.ShowDialog();
         }
-    }
 
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+    }
+}

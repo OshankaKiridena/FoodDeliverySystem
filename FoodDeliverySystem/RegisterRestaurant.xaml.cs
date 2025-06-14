@@ -1,18 +1,12 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace FoodDeliveryApp
 {
     public partial class RegisterRestaurant : Window
     {
-        public static List<RestaurantProfileWindow> RegisteredRestaurants = new List<RestaurantProfileWindow>();
-
-
-
         public RegisterRestaurant()
         {
             InitializeComponent();
@@ -33,70 +27,43 @@ namespace FoodDeliveryApp
                 lblStatus.Foreground = System.Windows.Media.Brushes.Red;
                 return;
             }
+
+            // (Optional) Password hashing could go here
+            // string hashedPassword = PasswordHasher.HashPassword(password);
+
             string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                try
-                {
-                    conn.Open();
-                    string insertQuery = "INSERT INTO Restaurant (restaurantName,Description, Username, Password) VALUES (@name,@description, @user, @pass)";
+                using SqlConnection conn = new(connectionString);
+                conn.Open();
 
-                    using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", restaurantName);
-                        cmd.Parameters.AddWithValue("@description", description);
-                        cmd.Parameters.AddWithValue("@user", username);
-                        cmd.Parameters.AddWithValue("@pass", password); // Consider hashing for security
+                string insertQuery = @"INSERT INTO Restaurant (RestaurantName, Description, Username, Password)
+                                       VALUES (@name, @description, @user, @pass)";
 
-                        cmd.ExecuteNonQuery();
+                using SqlCommand cmd = new(insertQuery, conn);
+                cmd.Parameters.AddWithValue("@name", restaurantName);
+                cmd.Parameters.AddWithValue("@description", description);
+                cmd.Parameters.AddWithValue("@user", username);
+                cmd.Parameters.AddWithValue("@pass", password); // Replace with hashedPassword for security
 
-                        MessageBox.Show("Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                        this.Close();
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    if (ex.Number == 2627) // Unique constraint violation
-                        lblMessage.Text = "Username already exists!";
-                    else
-                        lblMessage.Text = "Database error: " + ex.Message;
-                }
+                cmd.ExecuteNonQuery();
 
-
-                RestaurantProfileWindow restaurant = new RestaurantProfileWindow
-                {
-                    Name = restaurantName,
-                    Description = description,
-                    Username = username,
-                    Password = password,
-                    //MenuItems = new List<MenuItem>()
-                };
-
-                // RegisterRestaurant.Add(restaurant);
-
-                lblStatus.Text = "Restaurant profile registered successfully!";
-                lblStatus.Foreground = System.Windows.Media.Brushes.Green;
-
-                RestaurantProfileWindow profileWindow = new RestaurantProfileWindow();
-                // profileWindow.Show();
+                MessageBox.Show("🎉 Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627) // Unique constraint violation
+                    lblMessage.Text = "❌ Username already exists!";
+                else
+                    lblMessage.Text = "Database error: " + ex.Message;
             }
         }
 
-        public class RestaurantProfileWindow
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-
-
-
-
+            this.Close();
         }
     }
 }
-    
-
-   
