@@ -193,11 +193,11 @@
     </Window.Resources>
 
     <!-- Main Grid with Gradient Background -->
-    <Grid Background="{StaticResource BackgroundGradient}">
+    <Grid Background="{StaticResource BackgroundGradient}" Margin="-40,-147,-213,-119">
         <!-- Main Content Container -->
         <Border Background="#F5FFFFFF" 
                 CornerRadius="20" 
-                Margin="32,12,32,12"
+                Margin="32,50,50,63"
                 Padding="40">
             <Border.Effect>
                 <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="20" BlurRadius="40"/>

@@ -8,8 +8,7 @@ namespace FoodDeliveryApp
         public CartWindow()
         {
             InitializeComponent();
-            dgCart.ItemsSource = RestaurantWindow.Cart;
-            txtTotal.Text = $"Total: Rs {RestaurantWindow.Cart.Sum(x => x.Total):0.00}";
+            //xt = $"Total: Rs {RestaurantWindow.Cart.Sum(x => x.Total):0.00}";
         }
                                                      //Abstraction:hides payment details inside PaymentGatewayWindow
         private void PayNow_Click(object sender, RoutedEventArgs e)

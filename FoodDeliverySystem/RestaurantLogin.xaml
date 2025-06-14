@@ -99,7 +99,7 @@
                 <Button Content="Login"
                         Style="{StaticResource PrimaryButton}"
                         Click="Login_Click"
-                        HorizontalAlignment="Center"/>
+                        HorizontalAlignment="Center" Height="22"/>
 
                 <!-- Error Label -->
                 <TextBlock x:Name="lblError" Foreground="Red" TextAlignment="Center" Margin="0,5,0,10"/>
@@ -119,9 +119,9 @@
 
         <!-- Close Button -->
         <Button Content="✕" 
-                HorizontalAlignment="Right" 
+                HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
-                Margin="15" 
+                Margin="375,15,0,0" 
                 Width="30" 
                 Height="30" 
                 Background="Transparent" 

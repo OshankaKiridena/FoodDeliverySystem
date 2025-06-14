@@ -124,6 +124,7 @@
             <Border.Effect>
                 <DropShadowEffect Color="Black" Opacity="0.15" ShadowDepth="25" BlurRadius="50"/>
             </Border.Effect>
+            
 
             <Grid>
                 <!-- Header Section -->
@@ -220,5 +221,20 @@
                 FontSize="18" 
                 Cursor="Hand"
                 Click="Close_Click" RenderTransformOrigin="-0.486,0.779"/>
+        <!-- Review Button (Top Right Corner) -->
+        <Button Content="⭐ Review"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Top"
+        Margin="0,31,104,0"  
+            Width="90"
+        Height="35"
+        Background="{StaticResource ActiveButtonGradient}"
+        Foreground="White"
+        FontWeight="Bold"
+        FontSize="15"
+        BorderBrush="Transparent"
+        Cursor="Hand"
+        Click="Review_Click"/>
+
     </Grid>
 </Window>

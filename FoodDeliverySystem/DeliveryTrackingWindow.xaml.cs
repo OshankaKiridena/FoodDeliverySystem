@@ -14,16 +14,22 @@ namespace FoodDeliveryApp
         public DeliveryTrackingWindow()
         {
             InitializeComponent();
+            // 1. Set up delivery personnel
+            DeliveryStaffList = new List<string> { "Ravi", "Amal", "Nimesh" };
+            // 2. Set DataContext
+            DataContext = this; // So bindings in XAML can see the list
+                                // 3. Load deliveries into your DataGrid
             LoadDeliveries();
-            DataContext = this; // For data binding (especially ComboBox ItemsSource)
         }
 
         private void LoadDeliveries()
         {
             Deliveries = new List<DeliveryModel>
             {
-                new DeliveryModel { OrderId = 101, CustomerName = "John", Status = "Pending", AssignedTo = null },
-                new DeliveryModel { OrderId = 102, CustomerName = "Lily", Status = "Dispatched", AssignedTo = "Ravi" }
+                new DeliveryModel { OrderId = 101, CustomerName = "Oshanka", Status = "Pending", AssignedTo = "Amal" },
+                new DeliveryModel { OrderId = 102, CustomerName = "Manuja", Status = "Dispatched", AssignedTo = "Suresh" },
+                 new DeliveryModel { OrderId = 103, CustomerName = "Shamitha", Status = "Dispatched", AssignedTo = "Ravi" },
+                  new DeliveryModel { OrderId = 104, CustomerName = "Vihaga", Status = "Dispatched", AssignedTo = "Ravi" }
             };
 
             dgDeliveries.ItemsSource = Deliveries;

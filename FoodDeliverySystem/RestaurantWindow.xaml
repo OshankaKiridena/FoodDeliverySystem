@@ -193,11 +193,11 @@
     </Window.Resources>
 
     <!-- Main Container with Gradient Background -->
-    <Grid Background="{StaticResource BackgroundGradient}">
+    <Grid Background="{StaticResource BackgroundGradient}" Margin="-20,0,-29,-109">
         <!-- Content Card -->
         <Border Background="White" 
                 CornerRadius="20" 
-                Margin="30"
+                Margin="23,30,30,28"
                 Padding="0">
             <Border.Effect>
                 <DropShadowEffect Color="Black" Opacity="0.2" ShadowDepth="20" BlurRadius="40"/>
@@ -280,53 +280,35 @@
                                 Orientation="Horizontal" 
                                 HorizontalAlignment="Center" 
                                 Margin="0,25,0,0">
-                        <Button Content="🔄 Refresh List" 
-                                Style="{StaticResource ModernButtonStyle}" 
-                                Margin="0,0,15,0"
-                                Click="RefreshList_Click"/>
-                        <Button Content="📋 View Details" 
-                                Style="{StaticResource ModernButtonStyle}" 
-                                Click="ViewDetails_Click"/>
+                        <Button Content="Add to Cart"
+                           Style="{StaticResource ModernButtonStyle}"
+                          Width="160"
+                          Click="AddToCart_Click"/>
+
+
+
                     </StackPanel>
 
                     <!-- Restaurant List -->
                     <Border Background="#FAFBFC" 
                             CornerRadius="12" 
-                            Padding="0">
+                            Padding="0" Height="414" Width="771">
                         <Border.Effect>
                             <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="5" BlurRadius="15"/>
                         </Border.Effect>
+                        <DataGrid x:Name="dataGridMenu" AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="dataGridMenu_SelectionChanged" Margin="16,0,10,10">
+                            <DataGrid.Columns>
 
-                        <ListView x:Name="lvRestaurants"
-                                  Background="Transparent"
-                                  BorderThickness="0"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ItemContainerStyle="{StaticResource ModernListViewItemStyle}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="🏪 Restaurant Name" 
-                                                    Width="350" 
-                                                    DisplayMemberBinding="{Binding Name}" 
-                                                    HeaderContainerStyle="{StaticResource ModernListViewHeaderStyle}"/>
-                                    <GridViewColumn Header="📝 Description" 
-                                                    Width="400" 
-                                                    DisplayMemberBinding="{Binding Description}" 
-                                                    HeaderContainerStyle="{StaticResource ModernListViewHeaderStyle}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                                <DataGridTextColumn Header="RestaurantName" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Details" Binding="{Binding Details}" Width="100"/>
+                                
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Border>
                 </DockPanel>
             </Grid>
         </Border>
 
-        <!-- Close Button -->
-        <Button Content="✕" 
-                Style="{StaticResource CloseButtonStyle}"
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Top" 
-                Margin="40,40,0,0"
-                Click="Close_Click"/>
+
     </Grid>
 </Window>

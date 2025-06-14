@@ -1,7 +1,8 @@
-﻿using System;
+﻿using FoodDeliverySystem;
 using System.Configuration;
-using System.Windows;
 using Microsoft.Data.SqlClient;
+using System.Data.SqlClient;
+using System.Windows;
 
 namespace FoodDeliveryApp
 {
@@ -11,65 +12,66 @@ namespace FoodDeliveryApp
         {
             InitializeComponent();
         }
-    //Encapsulation used for the event handler login
-    private void Login_Click(object sender, RoutedEventArgs e)
-    {
-        string username = txtUsername.Text.Trim();
-        string password = txtPassword.Password.Trim();
 
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
-            lblError.Text = "Please enter both username and password.";
-            return;
-        }
-        // Abstraction: database connection details are hidden from UI code
-        // ✅ Use connection string from App.config
-        string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Password.Trim();
 
-                using SqlConnection conn = new(connectionString);
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                lblError.Text = "Please enter both username and password.";
+                return;
+            }
+
+            // Use connection string from App.config
+            string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
                 conn.Open();
 
-                string query = "SELECT id FROM restaurant WHERE Username = @username AND Password = @password";
-                using SqlCommand cmd = new(query, conn);
+                // Old logic: get the restaurant id if credentials match
+                string query = "SELECT id, restaurantname FROM restaurant WHERE Username = @username AND Password = @password";
+                SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", password);
 
-                using SqlDataReader reader = cmd.ExecuteReader();
+                SqlDataReader reader = cmd.ExecuteReader();
+
                 if (reader.Read())
                 {
                     int restaurantId = reader.GetInt32(0);
-                    Application.Current.Properties["RestaurantId"] = restaurantId;
+                    string restaurantName = reader.GetString(1);
 
-                    RestaurantProfileWindow dashboard = new();
+                    // After successful login, open the profile window for that restaurant
+                    RestaurantProfileWindow dashboard = new RestaurantProfileWindow(restaurantId,restaurantName );
                     dashboard.Show();
                     this.Close();
+
                 }
                 else
                 {
-                    lblError.Text = "❌ Invalid username or password.";
+                    lblError.Text = "Invalid username or password.";
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while logging in:\n{ex.Message}", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            RegisterRestaurant registerWindow = new();
+            RegisterRestaurant registerWindow = new RegisterRestaurant();
             registerWindow.ShowDialog();
         }
 
         private void ForgotPassword_Click(object sender, RoutedEventArgs e)
         {
-            ForgotPasswordWindow forgotWindow = new();
+            ForgotPasswordWindow forgotWindow = new ForgotPasswordWindow();
             forgotWindow.ShowDialog();
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
     }
 }

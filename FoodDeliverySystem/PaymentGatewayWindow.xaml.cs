@@ -34,6 +34,8 @@ namespace FoodDeliveryApp
 
             // Example: Clear cart if needed
             // RestaurantWindow.Cart.Clear();
+            CustomerTrackingWindow registerWindow = new CustomerTrackingWindow();
+            registerWindow.ShowDialog();
 
             this.Close();
         }

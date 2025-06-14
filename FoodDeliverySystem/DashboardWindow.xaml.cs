@@ -23,13 +23,19 @@ namespace FoodDeliverySystem
         // Placeholder for Deliveries button (currently disabled in UI)
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("🚚 Deliveries feature is coming soon!", "Coming Soon", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(" Deliveries feature is coming soon!", "Coming Soon", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         // Handle Close button (✕) click
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Review_Click(object sender, RoutedEventArgs e)
+        {
+            ReviewWindow page = new ReviewWindow();
+            page.ShowDialog();
         }
     }
 }
