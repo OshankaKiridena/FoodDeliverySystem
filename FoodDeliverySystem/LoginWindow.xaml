@@ -216,12 +216,12 @@
                             <DropShadowEffect Color="#FFFF6B6B" Opacity="0.3" ShadowDepth="10" BlurRadius="20"/>
                         </Border.Effect>
                         <TextBlock Text="🍕" FontSize="24" 
-                                   HorizontalAlignment="Center" 
-                                   VerticalAlignment="Center"/>
+                                   HorizontalAlignment="Left" 
+                                   VerticalAlignment="Top" Margin="11,12,0,0"/>
                     </Border>
 
                     <!-- Title -->
-                    <TextBlock Text="Welcome Back" 
+                    <TextBlock Text="Welcome Back!" 
                                FontSize="28" 
                                FontWeight="Bold" 
                                Foreground="#FF2C3E50" 
@@ -229,7 +229,7 @@
                                Margin="0,0,0,8"/>
 
                     <!-- Subtitle -->
-                    <TextBlock Text="Sign in to your food delivery account" 
+                    <TextBlock Text="Sign in to your FoodRush account" 
                                FontSize="14" 
                                Foreground="#FF7F8C8D" 
                                TextAlignment="Center"/>
@@ -303,7 +303,7 @@
         <Button Content="✕" 
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Top" 
-                Margin="20" 
+                Margin="0,24,51,0" 
                 Width="30" 
                 Height="30" 
                 Background="Transparent" 
