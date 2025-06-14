@@ -34,7 +34,7 @@ namespace FoodDeliveryApp
                 return;
             }
 
-            string hashedPassword = PasswordHasher.HashPassword(password); // 🔐 Hash after confirming
+            //string hashedPassword = PasswordHasher.HashPassword(password); // 🔐 Hash after confirming
 
             string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
 
@@ -50,7 +50,7 @@ namespace FoodDeliveryApp
                 cmd.Parameters.AddWithValue("@name", fullName);
                 cmd.Parameters.AddWithValue("@user", username);
                 cmd.Parameters.AddWithValue("@address", customerAddress);
-                cmd.Parameters.AddWithValue("@pass", hashedPassword);
+                cmd.Parameters.AddWithValue("@pass", password);
 
                 cmd.ExecuteNonQuery();
 

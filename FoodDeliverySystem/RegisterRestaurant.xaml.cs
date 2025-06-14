@@ -28,8 +28,7 @@ namespace FoodDeliveryApp
                 return;
             }
 
-            // (Optional) Password hashing could go here
-            // string hashedPassword = PasswordHasher.HashPassword(password);
+            
 
             string connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
 
@@ -38,14 +37,14 @@ namespace FoodDeliveryApp
                 using SqlConnection conn = new(connectionString);
                 conn.Open();
 
-                string insertQuery = @"INSERT INTO Restaurant (RestaurantName, Description, Username, Password)
-                                       VALUES (@name, @description, @user, @pass)";
+                string insertQuery = @"INSERT INTO Restaurant (RestaurantName,  Username, Password)
+                                       VALUES (@name,  @user, @pass)";
 
                 using SqlCommand cmd = new(insertQuery, conn);
                 cmd.Parameters.AddWithValue("@name", restaurantName);
-                cmd.Parameters.AddWithValue("@description", description);
+                //cmd.Parameters.AddWithValue("@description", description);
                 cmd.Parameters.AddWithValue("@user", username);
-                cmd.Parameters.AddWithValue("@pass", password); // Replace with hashedPassword for security
+                cmd.Parameters.AddWithValue("@pass", password); 
 
                 cmd.ExecuteNonQuery();
 
